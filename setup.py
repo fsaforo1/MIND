@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="mimind",
-    version=version,
+    version="1.0.0",
   	zip_safe=False,
   	license="GPLv3",
   	author="Dr. Yves-Laurent Kom Samo",
