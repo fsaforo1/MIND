@@ -43,6 +43,7 @@ class CopulaLearner(object):
 		self.model.compile(optimizer=self.opt, loss=self.loss)
 		self.copula_entropy = None
 		self.epochs = epochs
+		self.steps_per_epoch = steps_per_epoch
 
 
 	def fit(self, z, batch_size=10000): #, steps_per_epoch=1000, epochs=None
