@@ -37,7 +37,7 @@ def copula_entropy(z, subsets=[], epochs=None, steps_per_epoch=None):
 
 
 
-def mutual_information(y, x, epochs=None, steps_per_epoch=None):
+def mutual_information(y, x, epochs=20, steps_per_epoch=1000):
 	'''
 	Estimate the mutual information between two random vectors using MIND ([1]) with Spearman rank correlation constraints.
 
