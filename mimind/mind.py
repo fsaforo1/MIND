@@ -7,7 +7,7 @@ TensorFlow Implementation of MIND ([1]) under Spearman rank correlation constrai
 """
 import numpy as np
 
-from kxy.misc.tf import CopulaLearner
+from mimind.tf import CopulaLearner
 
 def copula_entropy(z, subsets=[]):
 	'''
