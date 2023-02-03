@@ -9,7 +9,7 @@ import numpy as np
 
 from mimind.tf import CopulaLearner
 
-def copula_entropy(z, subsets=[], epochs=None):
+def copula_entropy(z, subsets=[], epochs=None, steps_per_epoch=None):
 	'''
 	Estimate the entropy of the copula distribution of a d-dimensional random vector using MIND ([1]) with Spearman rank correlation constraints.
 
@@ -29,7 +29,7 @@ def copula_entropy(z, subsets=[], epochs=None):
 		return 0.0
 
 	d = z.shape[1]
-	cl = CopulaLearner(d, subsets=subsets, epochs=epochs)
+	cl = CopulaLearner(d, subsets=subsets, epochs=epochs, steps_per_epoch=steps_per_epoch)
 	cl.fit(z)
 	ent = min(cl.copula_entropy, 0.0)
 
