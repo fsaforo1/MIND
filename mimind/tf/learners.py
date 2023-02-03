@@ -45,10 +45,11 @@ class CopulaLearner(object):
 		self.epochs = epochs
 
 
-	def fit(self, z, batch_size=10000, steps_per_epoch=1000, epochs=None):
+	def fit(self, z, batch_size=10000, steps_per_epoch=1000): #, epochs=None
 		''' '''
 		z_gen = CopulaBatchGenerator(z, batch_size=batch_size, steps_per_epoch=steps_per_epoch)
-		epochs = get_default_parameter('epochs') if epochs is None else self.epochs #epochs
+		# epochs = get_default_parameter('epochs') if epochs is None else self.epochs #epochs
+		epochs = self.epochs #epochs
 		self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, \
 			callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()])
 		self.copula_entropy = self.model.evaluate(z_gen)
