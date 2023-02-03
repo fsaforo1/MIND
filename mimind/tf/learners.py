@@ -26,7 +26,7 @@ class CopulaLearner(object):
 	Maximum-entropy learner.
 	'''
 	def __init__(self, d, beta_1=None, beta_2=None, epsilon=None, amsgrad=None, \
-			name='Adam', lr=None, subsets=[], epochs=None):
+			name='Adam', lr=None, subsets=[], epochs=None, steps_per_epoch=None):
 		self.d = d
 		self.model = CopulaModel(self.d, subsets=subsets)
 		beta_1 = get_default_parameter('beta_1') if beta_1 is None else beta_1
@@ -45,11 +45,12 @@ class CopulaLearner(object):
 		self.epochs = epochs
 
 
-	def fit(self, z, batch_size=10000, steps_per_epoch=1000): #, epochs=None
+	def fit(self, z, batch_size=10000): #, steps_per_epoch=1000, epochs=None
 		''' '''
 		z_gen = CopulaBatchGenerator(z, batch_size=batch_size, steps_per_epoch=steps_per_epoch)
 		# epochs = get_default_parameter('epochs') if epochs is None else self.epochs #epochs
 		epochs = self.epochs #epochs
+		steps_per_epoch = self.steps_per_epoch
 		self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, \
 			callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()])
 		self.copula_entropy = self.model.evaluate(z_gen)
