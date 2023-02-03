@@ -15,7 +15,6 @@ setuptools.setup(
   	long_description_content_type='text/markdown',  # This is important
   	keywords = ["Mutual Information", "Data Valuation"],
     url='https://github.com/fsaforo1/MIND',
-    packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
