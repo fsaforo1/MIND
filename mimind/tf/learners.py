@@ -26,7 +26,7 @@ class CopulaLearner(object):
 	Maximum-entropy learner.
 	'''
 	def __init__(self, d, beta_1=None, beta_2=None, epsilon=None, amsgrad=None, \
-			name='Adam', learning_rate=None, subsets=[], epochs=None, steps_per_epoch=None):
+			name='Adam', learning_rate=None, subsets=[], epochs=None, steps_per_epoch=None, verbose=0):
 		self.d = d
 		self.model = CopulaModel(self.d, subsets=subsets)
 		beta_1 = get_default_parameter('beta_1') if beta_1 is None else beta_1
@@ -44,6 +44,7 @@ class CopulaLearner(object):
 		self.copula_entropy = None
 		self.epochs = epochs
 		self.steps_per_epoch = steps_per_epoch
+		self.verbose = verbose
 
 
 	def fit(self, z, batch_size=10000): #, steps_per_epoch=1000, epochs=None
@@ -56,7 +57,8 @@ class CopulaLearner(object):
 		z_gen = CopulaBatchGenerator(z, batch_size=batch_size, steps_per_epoch=steps_per_epoch)
 		
 		self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, \
-			callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()])
+			callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()],
+			verbose = self.verbose)
 		self.copula_entropy = self.model.evaluate(z_gen)
 
 
@@ -67,7 +69,7 @@ class PFSLearner(object):
 	Principal Feature Learner.
 	'''
 	def __init__(self, dx, dy=1, dox=0, doy=0, beta_1=None, beta_2=None, epsilon=None, amsgrad=None, \
-			learning_rate=None, name='Adam', expand_y=True):
+			learning_rate=None, name='Adam', expand_y=True, verbose=0):
 		self.expand_y = expand_y
 		self.dx = dx
 		self.dy = dy
@@ -94,6 +96,7 @@ class PFSLearner(object):
 		self.mutual_information = None
 		self.feature_direction = None
 		self.statistics = None
+		self.verbose = verbose
 
 
 	def fit(self, x, y, ox=None, oy=None, batch_size=None, n_shuffle=5, epochs=None, mi_eps=0.00001):
@@ -107,7 +110,8 @@ class PFSLearner(object):
 			steps_per_epoch=steps_per_epoch, n_shuffle=n_shuffle)
 		epochs = get_default_parameter('epochs') if epochs is None else epochs
 		self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, \
-			callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()])
+			callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()],
+			verbose = self.verbose)
 		self.mutual_information = -self.model.evaluate(z_gen)
 		w = self.model.w_layer.get_weights()[0]
 
@@ -117,7 +121,8 @@ class PFSLearner(object):
 			z_gen = PFSBatchGenerator(x, y, ox=ox, oy=oy, batch_size=batch_size, \
 				steps_per_epoch=steps_per_epoch, n_shuffle=n_shuffle)
 			self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, \
-				callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()])
+				callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()],
+				verbose = self.verbose)
 			self.mutual_information = -self.model.evaluate(z_gen)
 			w = self.model.w_layer.get_weights()[0]
 
@@ -168,7 +173,7 @@ class PFSOneShotLearner(object):
 	Principal Feature Learner learning multiple principal features simultaneously.
 	'''
 	def __init__(self, dx, dy=1, beta_1=None, beta_2=None, epsilon=None, amsgrad=None, \
-			learning_rate=None, name='Adam', p=1, expand_y=True):
+			learning_rate=None, name='Adam', p=1, expand_y=True, verbose=0):
 		self.expand_y = expand_y
 		x_ixs = [_ for _ in range(dx)]
 		y_ixs = [dx+_ for _ in range(dy)]
@@ -189,6 +194,7 @@ class PFSOneShotLearner(object):
 		self.mutual_information = None
 		self.feature_direction = None
 		self.statistics = None
+		self.verbose = verbose
 
 
 	def fit(self, x, y, batch_size=None, n_shuffle=5, epochs=None, mi_eps=0.00001):
@@ -201,7 +207,7 @@ class PFSOneShotLearner(object):
 		z_gen = PFSBatchGenerator(x, y, batch_size=batch_size, \
 			steps_per_epoch=steps_per_epoch, n_shuffle=n_shuffle)
 		epochs = get_default_parameter('epochs') if epochs is None else epochs
-		self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch)
+		self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, verbose=self.verbose)
 		self.mutual_information = -self.model.evaluate(z_gen)
 		w = self.model.w_layer.get_weights()[0]
 
@@ -210,7 +216,7 @@ class PFSOneShotLearner(object):
 			batch_size = 2*batch_size
 			z_gen = PFSBatchGenerator(x, y, batch_size=batch_size, \
 				steps_per_epoch=steps_per_epoch, n_shuffle=n_shuffle)
-			self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch)
+			self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, verbose=self.verbose)
 			self.mutual_information = -self.model.evaluate(z_gen)
 			w = self.model.w_layer.get_weights()[0]
 

@@ -9,7 +9,7 @@ import numpy as np
 
 from mimind.tf import CopulaLearner
 
-def copula_entropy(z, subsets=[], epochs=None, steps_per_epoch=None):
+def copula_entropy(z, subsets=[], epochs=None, steps_per_epoch=None, verbose=0):
 	'''
 	Estimate the entropy of the copula distribution of a d-dimensional random vector using MIND ([1]) with Spearman rank correlation constraints.
 
@@ -29,7 +29,7 @@ def copula_entropy(z, subsets=[], epochs=None, steps_per_epoch=None):
 		return 0.0
 
 	d = z.shape[1]
-	cl = CopulaLearner(d, subsets=subsets, epochs=epochs, steps_per_epoch=steps_per_epoch)
+	cl = CopulaLearner(d, subsets=subsets, epochs=epochs, steps_per_epoch=steps_per_epoch, verbose=verbose)
 	cl.fit(z)
 	ent = min(cl.copula_entropy, 0.0)
 
@@ -37,7 +37,7 @@ def copula_entropy(z, subsets=[], epochs=None, steps_per_epoch=None):
 
 
 
-def mutual_information(y, x, epochs=20, steps_per_epoch=1000):
+def mutual_information(y, x, epochs=20, steps_per_epoch=1000, verbose=0):
 	'''
 	Estimate the mutual information between two random vectors using MIND ([1]) with Spearman rank correlation constraints.
 
@@ -58,9 +58,9 @@ def mutual_information(y, x, epochs=20, steps_per_epoch=1000):
 	y = y[:, None] if len(y.shape)==1 else y
 	x = x[:, None] if len(x.shape)==1 else x
 	z = np.concatenate([y, x], axis=1)
-	huy = copula_entropy(y, epochs=epochs, steps_per_epoch=steps_per_epoch)
-	hux = copula_entropy(x, epochs=epochs, steps_per_epoch=steps_per_epoch)
-	huz = copula_entropy(z, epochs=epochs, steps_per_epoch=steps_per_epoch)
+	huy = copula_entropy(y, epochs=epochs, steps_per_epoch=steps_per_epoch, verbose=verbose)
+	hux = copula_entropy(x, epochs=epochs, steps_per_epoch=steps_per_epoch, verbose=verbose)
+	huz = copula_entropy(z, epochs=epochs, steps_per_epoch=steps_per_epoch, verbose=verbose)
 	mi = max(huy+hux-huz, 0.0)
 
 	return mi
