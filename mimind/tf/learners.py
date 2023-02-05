@@ -26,19 +26,19 @@ class CopulaLearner(object):
 	Maximum-entropy learner.
 	'''
 	def __init__(self, d, beta_1=None, beta_2=None, epsilon=None, amsgrad=None, \
-			name='Adam', lr=None, subsets=[], epochs=None, steps_per_epoch=None):
+			name='Adam', learning_rate=None, subsets=[], epochs=None, steps_per_epoch=None):
 		self.d = d
 		self.model = CopulaModel(self.d, subsets=subsets)
 		beta_1 = get_default_parameter('beta_1') if beta_1 is None else beta_1
 		beta_2 = get_default_parameter('beta_2') if beta_2 is None else beta_2
-		lr = get_default_parameter('lr') if lr is None else lr
+		learning_rate = get_default_parameter('learning_rate') if learning_rate is None else learning_rate
 		amsgrad = get_default_parameter('amsgrad') if amsgrad is None else amsgrad
 		epsilon = get_default_parameter('epsilon') if epsilon is None else epsilon
 		logging.info('Using the Adam optimizer with learning parameters: ' \
-			'lr: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
-			(lr, beta_1, beta_2, epsilon, amsgrad))
+			'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
+			(learning_rate, beta_1, beta_2, epsilon, amsgrad))
 		self.opt = Adam(beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, amsgrad=amsgrad, \
-			name=name, lr=lr)
+			name=name, learning_rate=learning_rate)
 		self.loss = MINDLoss()
 		self.model.compile(optimizer=self.opt, loss=self.loss)
 		self.copula_entropy = None
@@ -67,7 +67,7 @@ class PFSLearner(object):
 	Principal Feature Learner.
 	'''
 	def __init__(self, dx, dy=1, dox=0, doy=0, beta_1=None, beta_2=None, epsilon=None, amsgrad=None, \
-			lr=None, name='Adam', expand_y=True):
+			learning_rate=None, name='Adam', expand_y=True):
 		self.expand_y = expand_y
 		self.dx = dx
 		self.dy = dy
@@ -81,14 +81,14 @@ class PFSLearner(object):
 		self.model = PFSModel(x_ixs, y_ixs, ox_ixs=ox_ixs, oy_ixs=oy_ixs, expand_y=expand_y)
 		beta_1 = get_default_parameter('beta_1') if beta_1 is None else beta_1
 		beta_2 = get_default_parameter('beta_2') if beta_2 is None else beta_2
-		lr = get_default_parameter('lr') if lr is None else lr
+		learning_rate = get_default_parameter('learning_rate') if learning_rate is None else learning_rate
 		amsgrad = get_default_parameter('amsgrad') if amsgrad is None else amsgrad
 		epsilon = get_default_parameter('epsilon') if epsilon is None else epsilon
 		logging.info('Using the Adam optimizer with learning parameters: ' \
-			'lr: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
-			(lr, beta_1, beta_2, epsilon, amsgrad))
+			'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
+			(learning_rate, beta_1, beta_2, epsilon, amsgrad))
 		self.opt = Adam(beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, amsgrad=amsgrad, \
-			name=name, lr=lr)
+			name=name, learning_rate=learning_rate)
 		self.loss = RectifiedMINDLoss() # MINDLoss()
 		self.model.compile(optimizer=self.opt, loss=self.loss)
 		self.mutual_information = None
@@ -168,7 +168,7 @@ class PFSOneShotLearner(object):
 	Principal Feature Learner learning multiple principal features simultaneously.
 	'''
 	def __init__(self, dx, dy=1, beta_1=None, beta_2=None, epsilon=None, amsgrad=None, \
-			lr=None, name='Adam', p=1, expand_y=True):
+			learning_rate=None, name='Adam', p=1, expand_y=True):
 		self.expand_y = expand_y
 		x_ixs = [_ for _ in range(dx)]
 		y_ixs = [dx+_ for _ in range(dy)]
@@ -176,14 +176,14 @@ class PFSOneShotLearner(object):
 		self.model = PFSOneShotModel(x_ixs, y_ixs, p=p, expand_y=expand_y)
 		beta_1 = get_default_parameter('beta_1') if beta_1 is None else beta_1
 		beta_2 = get_default_parameter('beta_2') if beta_2 is None else beta_2
-		lr = get_default_parameter('lr') if lr is None else lr
+		learning_rate = get_default_parameter('learning_rate') if learning_rate is None else learning_rate
 		amsgrad = get_default_parameter('amsgrad') if amsgrad is None else amsgrad
 		epsilon = get_default_parameter('epsilon') if epsilon is None else epsilon
 		logging.info('Using the Adam optimizer with learning parameters: ' \
-			'lr: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
-			(lr, beta_1, beta_2, epsilon, amsgrad))
+			'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
+			(learning_rate, beta_1, beta_2, epsilon, amsgrad))
 		self.opt = Adam(beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, amsgrad=amsgrad, \
-			name=name, lr=lr)
+			name=name, learning_rate=learning_rate)
 		self.loss = RectifiedMINDLoss() # MINDLoss()
 		self.model.compile(optimizer=self.opt, loss=self.loss)
 		self.mutual_information = None

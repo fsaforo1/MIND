@@ -4,7 +4,7 @@
 Global default training configs
 """
 # LEARNING PARAMETERS
-LR = 0.005
+LEARNING_RATE = 0.005
 EPOCHS = 20
 
 # ADAM PARAMETERS
