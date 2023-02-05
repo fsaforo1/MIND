@@ -34,9 +34,9 @@ class CopulaLearner(object):
 		learning_rate = get_default_parameter('learning_rate') if learning_rate is None else learning_rate
 		amsgrad = get_default_parameter('amsgrad') if amsgrad is None else amsgrad
 		epsilon = get_default_parameter('epsilon') if epsilon is None else epsilon
-		logging.info('Using the Adam optimizer with learning parameters: ' \
-			'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
-			(learning_rate, beta_1, beta_2, epsilon, amsgrad))
+		# logging.info('Using the Adam optimizer with learning parameters: ' \
+		# 	'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
+		# 	(learning_rate, beta_1, beta_2, epsilon, amsgrad))
 		self.opt = Adam(beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, amsgrad=amsgrad, \
 			name=name, learning_rate=learning_rate)
 		self.loss = MINDLoss()
@@ -57,7 +57,7 @@ class CopulaLearner(object):
 		z_gen = CopulaBatchGenerator(z, batch_size=batch_size, steps_per_epoch=steps_per_epoch)
 		
 		self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, \
-			callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()],
+			callbacks=[EarlyStopping(patience=3, monitor='loss', verbose=self.verbose), TerminateOnNaN()],
 			verbose = self.verbose)
 		self.copula_entropy = self.model.evaluate(z_gen)
 
@@ -86,9 +86,9 @@ class PFSLearner(object):
 		learning_rate = get_default_parameter('learning_rate') if learning_rate is None else learning_rate
 		amsgrad = get_default_parameter('amsgrad') if amsgrad is None else amsgrad
 		epsilon = get_default_parameter('epsilon') if epsilon is None else epsilon
-		logging.info('Using the Adam optimizer with learning parameters: ' \
-			'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
-			(learning_rate, beta_1, beta_2, epsilon, amsgrad))
+		# logging.info('Using the Adam optimizer with learning parameters: ' \
+		# 	'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
+		# 	(learning_rate, beta_1, beta_2, epsilon, amsgrad))
 		self.opt = Adam(beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, amsgrad=amsgrad, \
 			name=name, learning_rate=learning_rate)
 		self.loss = RectifiedMINDLoss() # MINDLoss()
@@ -110,7 +110,7 @@ class PFSLearner(object):
 			steps_per_epoch=steps_per_epoch, n_shuffle=n_shuffle)
 		epochs = get_default_parameter('epochs') if epochs is None else epochs
 		self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, \
-			callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()],
+			callbacks=[EarlyStopping(patience=3, monitor='loss', verbose=self.verbose), TerminateOnNaN()],
 			verbose = self.verbose)
 		self.mutual_information = -self.model.evaluate(z_gen)
 		w = self.model.w_layer.get_weights()[0]
@@ -121,7 +121,7 @@ class PFSLearner(object):
 			z_gen = PFSBatchGenerator(x, y, ox=ox, oy=oy, batch_size=batch_size, \
 				steps_per_epoch=steps_per_epoch, n_shuffle=n_shuffle)
 			self.model.fit(z_gen, epochs=epochs, batch_size=batch_size, steps_per_epoch=steps_per_epoch, \
-				callbacks=[EarlyStopping(patience=3, monitor='loss'), TerminateOnNaN()],
+				callbacks=[EarlyStopping(patience=3, monitor='loss', verbose=self.verbose), TerminateOnNaN()],
 				verbose = self.verbose)
 			self.mutual_information = -self.model.evaluate(z_gen)
 			w = self.model.w_layer.get_weights()[0]
@@ -184,9 +184,9 @@ class PFSOneShotLearner(object):
 		learning_rate = get_default_parameter('learning_rate') if learning_rate is None else learning_rate
 		amsgrad = get_default_parameter('amsgrad') if amsgrad is None else amsgrad
 		epsilon = get_default_parameter('epsilon') if epsilon is None else epsilon
-		logging.info('Using the Adam optimizer with learning parameters: ' \
-			'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
-			(learning_rate, beta_1, beta_2, epsilon, amsgrad))
+		# logging.info('Using the Adam optimizer with learning parameters: ' \
+		# 	'learning_rate: %.4f, beta_1: %.4f, beta_2: %.4f, epsilon: %.8f, amsgrad: %s' % \
+		# 	(learning_rate, beta_1, beta_2, epsilon, amsgrad))
 		self.opt = Adam(beta_1=beta_1, beta_2=beta_2, epsilon=epsilon, amsgrad=amsgrad, \
 			name=name, learning_rate=learning_rate)
 		self.loss = RectifiedMINDLoss() # MINDLoss()
