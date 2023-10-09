@@ -13,7 +13,7 @@ The CopulaLearner class encapsulates the logic for training a maximum-entropy co
 
 
 
-## MINDLoss
+## The Mutual Information Objective
 
 - **Objective Function:** The `MINDLoss` class implements a custom loss function that calculates the mutual information between two random variables using the copula representation. The loss function is defined as: 
 
