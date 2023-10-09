@@ -17,12 +17,12 @@ The CopulaLearner class encapsulates the logic for training a maximum-entropy co
 
 - **Objective Function:** The `MINDLoss` class implements a custom loss function that calculates the mutual information between two random variables using the copula representation. The loss function is defined as: 
 
-  \[ \text{MIND Loss} = -E_P(T(x, y)^T\theta) + \log E_Q(e^{T(x, y)^T\theta}) \]
+  $$\text{MIND Loss} = -E_P(T(x, y)^T\theta) + \log E_Q(e^{T(x, y)^T\theta})$$
 
   Where:
-  - \(T(x, y)\) represents copula samples generated from the copula model.
-  - \(\theta\) represents parameters of the copula model.
-  - \(E_P\) and \(E_Q\) represent expectations under distributions \(P\) and \(Q\), respectively.
+  - $T(x, y)$ represents copula samples generated from the copula model.
+  - $\theta$ represents parameters of the copula model.
+  - $E_P$ and $E_Q$ represent expectations under distributions $P$) and $Q$, respectively.
 
 - **Usage in CopulaLearner:**
   - The `MINDLoss` class is utilized in the `CopulaLearner` during the compilation of the copula model. When the copula model is compiled, the `MINDLoss` instance is set as the loss function. This means that during training, the copula model aims to minimize the mutual information calculated by the `MINDLoss` function.
