@@ -3,17 +3,18 @@ An implementation of MIND
 
 - [Inductive Mutual Information Estimation, A Convex Maximum-Entropy Copula Approach](https://arxiv.org/abs/2102.13182) by Yves-Laurent Kom Samo 
 
+## The key Modules
 
-## CopulaBatchGenerator
+### CopulaBatchGenerator
 
 The `CopulaBatchGenerator` class generates batches of copula samples for training a maximum-entropy copula model. It ensures that the generated samples are diverse and representative of the underlying copula structure in the input data. The class is designed to be used as a data generator during the training process.
 
-## CopulaLearner
-The CopulaLearner class encapsulates the logic for training a maximum-entropy copula model. It handles the setup of the copula model, optimizer, loss function, and training process. By calling the fit method with input data, the user can train the copula model efficiently, with the flexibility to specify various training parameters. The class is designed to provide a convenient interface for training copula models for specific datasets.
+### CopulaLearner
+The `CopulaLearner` class encapsulates the logic for training a maximum-entropy copula model. It handles the setup of the copula model, optimizer, loss function, and training process. By calling the fit method with input data, the user can train the copula model efficiently, with the flexibility to specify various training parameters. The class is designed to provide a convenient interface for training copula models for specific datasets.
 
 
 
-## The Mutual Information Objective
+### The Mutual Information Objective
 
 - **Objective Function:** The `MINDLoss` class implements a custom loss function that calculates the mutual information between two random variables using the copula representation. The loss function is defined as: 
 
